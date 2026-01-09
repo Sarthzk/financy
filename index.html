@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financy | Sarthak Mohite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#F8F9FB] font-['Inter'] text-slate-900">
+
+    <div id="auth-overlay" class="fixed inset-0 z-[3000] flex items-center justify-center bg-[#F8F9FB] p-4">
+        <div class="bg-white/90 backdrop-blur-xl p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md border border-white text-center">
+            <div class="w-12 h-12 bg-blue-600 rounded-2xl mx-auto mb-4"></div>
+            <h2 class="text-2xl font-bold mb-1">Financy</h2>
+            <p class="text-slate-500 text-sm mb-6">Master your money, one entry at a time.</p>
+            
+            <div class="text-left space-y-2 mb-6 bg-slate-50 p-4 rounded-2xl text-[0.75rem] border border-slate-100">
+                <p>🚀 <strong>Cloud Powered:</strong> Syncs instantly to Firebase.</p>
+                <p>📊 <strong>Smart Charts:</strong> Visualize where your money goes.</p>
+                <p>🔐 <strong>Secure:</strong> Protected by Google Authentication.</p>
+            </div>
+
+            <input type="email" id="loginEmail" class="w-full p-4 mb-3 bg-slate-100 border-none rounded-xl focus:ring-2 focus:ring-blue-600 outline-none" placeholder="Email" onkeypress="handleAuthEnter(event)">
+            <input type="password" id="loginPassword" class="w-full p-4 mb-4 bg-slate-100 border-none rounded-xl focus:ring-2 focus:ring-blue-600 outline-none" placeholder="Password" onkeypress="handleAuthEnter(event)">
+            
+            <button onclick="handleAuth()" id="loginBtn" class="w-full bg-blue-600 text-white p-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex items-center justify-center gap-2 mb-4">
+                <span id="btnText">Login / Sign Up</span>
+                <div id="loginSpinner" class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin hidden"></div>
+            </button>
+
+            <div class="flex items-center mb-4"><hr class="flex-grow border-slate-200"> <span class="px-3 text-slate-400 text-xs">OR</span> <hr class="flex-grow border-slate-200"></div>
+
+            <button onclick="handleGoogleLogin()" class="w-full border border-slate-200 p-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-slate-50 transition-all">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Continue with Google
+            </button>
+        </div>
+    </div>
+
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 px-8 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-2 font-bold text-xl"><div class="w-8 h-8 bg-blue-600 rounded-lg"></div> Financy</div>
+            <div class="hidden md:flex gap-6 text-sm font-semibold text-slate-400">
+                <button onclick="showPage('dashboard', this)" class="nav-link text-blue-600">Dashboard</button>
+                <button onclick="showPage('transactions', this)" class="nav-link hover:text-slate-900">History</button>
+                <button onclick="showPage('analytics', this)" class="nav-link hover:text-slate-900">Analytics</button>
+                <button onclick="showPage('budget', this)" class="nav-link hover:text-slate-900">Budget</button>
+            </div>
+        </div>
+        <button onclick="logoutUser()" class="text-sm font-bold text-red-600 bg-red-50 px-4 py-2 rounded-xl hover:bg-red-100 transition-all">Logout</button>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-8">
+        <div id="page-dashboard" class="page-view grid grid-cols-12 gap-8">
+            <div class="col-span-12 lg:col-span-8 space-y-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="h-60 bg-gradient-to-br from-blue-600 to-indigo-900 rounded-[2.5rem] p-10 text-white relative overflow-hidden shadow-2xl shadow-blue-200">
+                        <div class="relative z-10 flex flex-col justify-between h-full">
+                            <div>
+                                <p class="text-blue-100 text-xs tracking-widest uppercase mb-1">Available Balance</p>
+                                <h2 class="text-4xl font-bold" id="totalBalance">₹0.00</h2>
+                            </div>
+                            <p class="text-xl tracking-[0.3em] font-medium">•••• •••• •••• 5592</p>
+                        </div>
+                        <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-white/10 rounded-full"></div>
+                    </div>
+                    <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm space-y-4">
+                        <h4 class="font-bold text-lg">Quick Add</h4>
+                        <div class="flex gap-2">
+                            <select id="type" class="w-1/3 p-3 bg-slate-50 rounded-xl outline-none text-sm font-bold">
+                                <option value="expense">Expense</option>
+                                <option value="income">Income</option>
+                            </select>
+                            <input type="number" id="amount" class="w-2/3 p-3 bg-slate-50 rounded-xl outline-none text-sm" placeholder="Amount (₹)">
+                        </div>
+                        <input type="text" id="category" class="w-full p-3 bg-slate-50 rounded-xl outline-none text-sm" placeholder="Category (e.g. Food)" onkeypress="handleEnter(event)">
+                        <button onclick="addEntry()" class="w-full bg-slate-900 text-white p-3 rounded-xl font-bold hover:bg-black transition-all">Save Entry</button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm">
+                    <h3 class="font-bold text-xl mb-8">Money Analytics</h3>
+                    <div class="h-64"><canvas id="analyticsChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="col-span-12 lg:col-span-4 space-y-6">
+                <div class="p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm space-y-6">
+                    <div>
+                        <p class="text-slate-400 text-xs font-bold uppercase mb-1">Income</p>
+                        <h4 class="text-2xl font-bold text-green-600" id="totalIncome">₹0</h4>
+                    </div>
+                    <div>
+                        <p class="text-slate-400 text-xs font-bold uppercase mb-1">Expenses</p>
+                        <h4 class="text-2xl font-bold text-red-600" id="totalExpenses">₹0</h4>
+                    </div>
+                </div>
+                <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm">
+                    <h4 class="font-bold mb-6">Recent Activity</h4>
+                    <div id="expenseList" class="space-y-4 text-sm"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-transactions" class="page-view hidden space-y-6">
+            <h2 class="text-2xl font-bold">Transaction History</h2>
+            <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm">
+                <div id="fullHistoryList" class="space-y-4"></div>
+            </div>
+        </div>
+
+        <div id="page-analytics" class="page-view hidden space-y-6">
+            <h2 class="text-2xl font-bold">Spending Trends</h2>
+            <div class="bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm">
+                <div class="h-[400px]"><canvas id="analyticsLineChart"></canvas></div>
+            </div>
+        </div>
+
+        <div id="page-budget" class="page-view hidden space-y-6">
+            <h2 class="text-2xl font-bold">Budget Planning</h2>
+            <div class="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-sm max-w-xl">
+                <p class="text-slate-500 mb-6">Set a monthly limit to control your spending.</p>
+                <input type="number" id="budgetInput" class="w-full p-4 bg-slate-50 rounded-2xl outline-none mb-6 text-xl font-bold" placeholder="₹ Enter Monthly Limit" oninput="runBudgetLogic()">
+                <div class="w-full bg-slate-100 h-6 rounded-full overflow-hidden mb-4">
+                    <div id="budgetBar" class="bg-blue-600 h-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p id="budgetText" class="font-bold text-slate-700">₹0 / ₹0 Used (0%)</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
