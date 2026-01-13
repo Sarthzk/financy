@@ -183,6 +183,7 @@ window.handleAuth = async () => {
             const res = await createUserWithEmailAndPassword(auth, e, p);
             await updateProfile(res.user, { displayName: sanitizeInput(u) });
             await setDoc(doc(db, "users", res.user.uid), { displayName: u });
+            updateProfileView({ ...res.user, displayName: u });
         } else {
             await signInWithEmailAndPassword(auth, e, p);
         }
