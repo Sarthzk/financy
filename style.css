@@ -119,3 +119,35 @@ input:focus, select:focus {
         animation: none !important;
     }
 }
+.select-left-arrow {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-left: 2.5rem !important; /* Space for the arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 1rem center; /* Moves arrow to the left */
+    background-size: 1rem;
+}
+/* Optimization for iOS Safari Safe Areas and Dynamic Viewport */
+body {
+    /* Use dynamic viewport height to account for mobile URL bars */
+    height: 100dvh; 
+    /* Add padding for the iPhone notch/status bar */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    /* Prevents the 'rubber-band' scroll effect in Safari */
+    overscroll-behavior-y: none; 
+}
+
+/* Ensure the mobile header respects safe areas */
+.lg\:hidden.flex.items-center {
+    padding-top: 0.5rem;
+    margin-top: env(safe-area-inset-top);
+}
+
+/* Smooth scrolling for main content only */
+main {
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+}
