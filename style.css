@@ -1,37 +1,121 @@
-#auth-overlay {
-    background-color: #f8f9fd;
-    background-image: 
-        radial-gradient(at 0% 0%, hsla(225,100%,94%,1) 0, transparent 50%), 
-        radial-gradient(at 100% 0%, hsla(217,100%,82%,1) 0, transparent 50%), 
-        radial-gradient(at 100% 100%, hsla(225,100%,94%,1) 0, transparent 50%), 
-        radial-gradient(at 0% 100%, hsla(217,100%,82%,1) 0, transparent 50%);
+/* ============================================================================
+   FINANCY - BRANDED FINTECH STYLE GUIDE
+   ============================================================================ */
+
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #0A122A;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 .page-view {
-    animation: fadeIn 0.4s ease-out;
+    animation: slideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+.glass-card {
+    background: rgba(22, 31, 40, 0.65) !important;
+    backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    border: 1px solid rgba(212, 175, 55, 0.08) !important;
 }
 
 .transaction-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
-    background: #fcfcfd;
+    padding: 1.25rem;
+    background: #161F28;
     border-radius: 1.25rem;
-    border: 1px solid #f1f5f9;
-    transition: all 0.2s;
+    border: 1px solid #242F3A;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .transaction-row:hover {
-    background: #ffffff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transform: scale(1.01);
+    background: #242F3A;
+    transform: scale(1.015) translateY(-2px);
+    border-color: rgba(11, 80, 218, 0.3);
 }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+/* SIDEBAR LOGIC */
+.sidebar-expanded {
+    width: 280px;
+}
+
+.sidebar-collapsed {
+    width: 80px;
+}
+
+/* Hide website name and label text when collapsed */
+.sidebar-collapsed .sidebar-text {
+    display: none !important;
+}
+
+/* Center icons when collapsed */
+.sidebar-collapsed .nav-link {
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+/* Typography Enhancements for Amounts */
+#totalBalance, #totalIncome, #totalExpenses {
+    letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0D141C;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #242F3A;
+    border-radius: 10px;
+}
+
+.nav-link[aria-selected="true"] {
+    position: relative;
+    color: #0B50DA;
+    background-color: rgba(11, 80, 218, 0.1);
+}
+
+.nav-link[aria-selected="true"]::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 20px;
+    background: #0B50DA;
+    border-radius: 0 4px 4px 0;
+}
+
+input, select, button {
+    transition: all 0.2s ease-in-out;
+}
+
+input:focus, select:focus {
+    box-shadow: 0 0 0 3px rgba(11, 80, 218, 0.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .page-view {
+        animation: none !important;
+    }
+}
